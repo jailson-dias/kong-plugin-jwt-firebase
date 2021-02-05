@@ -111,9 +111,9 @@ kubectl create configmap kong-plugin-jwt-firebase --from-file=jwt-firebase -n de
 echo "
                               kind: KongPlugin
                               metadata:
-                                name: fundabily-jwt-firebase
+                                name: CUSTOM_NAME_HERE-jwt-firebase
                               config:
-                                project_id: "arboreal-groove-302218"
+                                project_id: "YourId"
                               plugin: jwt-firebase
                               " | kubectl apply -f -
 
