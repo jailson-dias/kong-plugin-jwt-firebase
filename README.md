@@ -103,3 +103,18 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
+
+
+kubectl create configmap kong-plugin-jwt-firebase --from-file=jwt-firebase -n default   
+
+
+echo "
+                              kind: KongPlugin
+                              metadata:
+                                name: fundabily-jwt-firebase
+                              config:
+                                project_id: "arboreal-groove-302218"
+                              plugin: jwt-firebase
+                              " | kubectl apply -f -
+
+
