@@ -1,0 +1,7 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+  name: CUSTOM_NAME_HERE-jwt-firebase
+config:
+  project_id: "Your_FB_Proj_Id"
+plugin: jwt-firebase
