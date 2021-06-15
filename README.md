@@ -68,6 +68,9 @@ $ curl -ik -X GET \
     --header 'Authorization: <token-id> '
 ```
 
+### Custom claims
+Detection of custom claim in token
+
 #### TODO: Improvement or Tech debt
 TBD
 
