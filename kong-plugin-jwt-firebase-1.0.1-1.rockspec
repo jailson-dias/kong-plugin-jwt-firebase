@@ -1,7 +1,7 @@
 package = "kong-plugin-jwt-firebase"
-version = "1.0.0-1"
+version = "1.0.1-1"
 source = {
-  url = "https://github.com/hpsony94/kong-plugin-jwt-firebase",
+  url = "https://github.com/grptx/kong-plugin-jwt-firebase",
 }
 description = {
   summary = "This plugin allows Kong to verify JWT Firebase Token.",

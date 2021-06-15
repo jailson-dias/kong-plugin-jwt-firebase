@@ -22,8 +22,8 @@ JwtHandler.PRIORITY = 70
 JwtHandler.VERSION = "1.0.0"
 
 --- Grab a public key from google api by the kid value
--- Grab the public key from https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com 
--- and use a JWT library to verify the signature. Use the value of max-age in the Cache-Control header of the response 
+-- Grab the public key from https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com
+-- and use a JWT library to verify the signature. Use the value of max-age in the Cache-Control header of the response
 -- from that endpoint to know when to refresh the public keys.
 local function grab_public_key_bykid(t_kid)
   kong.log.notice("### grab_public_key_bykid() " .. t_kid)
@@ -39,7 +39,7 @@ local function grab_public_key_bykid(t_kid)
   local resWithoutNL = string.gsub(string.gsub(res.body, "\n", ""), "\r", "")
   kong.log.notice("### Response:" .. resWithoutNL)
 
-  local cmd = "echo '" .. res.body .. "' | grep -i " .. t_kid .. magic 
+  local cmd = "echo '" .. res.body .. "' | grep -i " .. t_kid .. magic
 
   kong.log.notice("### cmd: " .. cmd)
   local cmd_handle = io.popen(cmd)
@@ -133,7 +133,7 @@ local function do_authentication(conf)
     kong.log.err(err)
     return kong.response.exit(500, { message = "An unexpected error occurred" })
   end
-  
+
   local token_type = type(token)
   if token_type ~= "string" then
     if token_type == "nil" then
@@ -161,7 +161,7 @@ local function do_authentication(conf)
   if not hd_alg or hd_alg ~= "RS256" then
     return false, { status = 401, message = "Invalid algorithm" }
   end
- 
+
   -- Verify Payload
   -- -- Verify "iss"
   local pl_iss = jwt.claims.iss
@@ -178,7 +178,7 @@ local function do_authentication(conf)
   if not pl_aud or pl_aud ~= conf.project_id then
     return false, { status = 401, message = "Invalid aud in the header"}
   end
-  -- -- Verify the "exp" 
+  -- -- Verify the "exp"
   kong.log.notice("### Checking exp ... ")
   local ok_claims, errors = jwt:verify_registered_claims(conf.claims_to_verify)
   if not ok_claims then
@@ -191,6 +191,14 @@ local function do_authentication(conf)
     if not ok then
       return false, { status = 401, errors = errors }
     end
+  end
+
+  if conf.custom_claim ~= nill then
+    local pl_custom_claim = jwt.claims[conf.custom_claim]
+    kong.log.notice("### payload.custom_claim")
+    if not pl_custom_claim then
+        return false, { status = 401, message = "custom claim not found" }
+      end
   end
 
   -- -- Verify the "sub" must be non-empty
@@ -208,9 +216,9 @@ local function do_authentication(conf)
 
 
   -- Finally -- Verify the signature
-  -- Finally, ensure that the ID token was signed by the private key corresponding to the token's kid claim. 
-  -- Grab the public key from https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com 
-  -- and use a JWT library to verify the signature. Use the value of max-age in the Cache-Control header of the response 
+  -- Finally, ensure that the ID token was signed by the private key corresponding to the token's kid claim.
+  -- Grab the public key from https://www.googleapis.com/robot/v1/metadata/x509/securetoken@system.gserviceaccount.com
+  -- and use a JWT library to verify the signature. Use the value of max-age in the Cache-Control header of the response
   -- from that endpoint to know when to refresh the public keys.
   -- Now verify the JWT signature
   local kid = jwt.header.kid
@@ -233,7 +241,7 @@ local function do_authentication(conf)
   end
   -- -- By using jwt lib to verify signature
   -- -- If failed
-  -- -- -- grab a new public key from the google api 
+  -- -- -- grab a new public key from the google api
   -- -- -- store this public key into memory file if it verifies  successful at 2nd time
   if not jwt:verify_signature(public_key) then
     kong.log.notice("### Grabbing pubkey from google URL ...")
