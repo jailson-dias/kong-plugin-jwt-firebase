@@ -13,8 +13,8 @@ dependencies = {
 build = {
   type = "builtin",
   modules = {
-    ["jwt-firebase.handler"] = "kong/plugins/jwt-firebase/handler.lua",
-    ["jwt-firebase.schema"]  = "kong/plugins/jwt-firebase/schema.lua"
+    ["kong.plugins.jwt-firebase.handler"] = "kong/plugins/jwt-firebase/handler.lua",
+    ["kong.plugins.jwt-firebase.schema"]  = "kong/plugins/jwt-firebase/schema.lua"
   }
 }
 
