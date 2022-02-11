@@ -1,5 +1,5 @@
 package = "jwt-firebase"
-version = "1.1.0"
+version = "1.1.0-1"
 source = {
   url = "https://github.com/jailson-dias/kong-plugin-jwt-firebase",
 }
